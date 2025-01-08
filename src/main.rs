@@ -1,3 +1,4 @@
+use std::env;
 use std::io::{self};
 use std::process::Command;
 
@@ -70,7 +71,10 @@ async fn main() {
         .route("/download", get(download_end_point))
         .route("/", get("ok"));
 
+    let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
     // run our app with hyper, listening globally on port 3000
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port))
+        .await
+        .unwrap();
     axum::serve(listener, app).await.unwrap();
 }

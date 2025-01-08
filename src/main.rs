@@ -35,7 +35,7 @@ async fn download_end_point(
         None => "".to_string(),
     };
     let video_url = format!("https://www.youtube.com/watch?v={}", &video_id);
-    let download_path_string = format!("{}.%(ext)s", &video_id);
+    let download_path_string = format!("./{}.%(ext)s", &video_id);
     let download_path = download_path_string.as_str();
 
     // Download audio
@@ -43,7 +43,7 @@ async fn download_end_point(
         eprintln!("Error downloading audio: {}", e);
     }
 
-    let mut file = tokio::fs::File::open(format!("{}.m4a", &video_id))
+    let mut file = tokio::fs::File::open(format!("./{}.m4a", &video_id))
         .await
         .expect("Failed to open video file");
     let mut buffer = Vec::new();
@@ -55,7 +55,7 @@ async fn download_end_point(
         .header("Content-Type", "audio/mp4") // Correct MIME type for .m4a (audio/mp4)
         .header(
             "Content-Disposition",
-            format!("inline; filename=\"{}.m4a\"", &video_id),
+            format!("inline; filename=\"./{}.m4a\"", &video_id),
         ) // Optional: suggest file download or inline playback
         .body(axum::body::Body::from(buffer))
         .unwrap();

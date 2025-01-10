@@ -1,17 +1,18 @@
-use std::env;
-use std::io::{self};
-use std::process::Command;
 use axum::extract::Query;
 use axum::response::Response;
 use axum::routing::get;
 use axum::Router;
 use std::collections::HashMap;
-use tokio::io::AsyncReadExt;
+use std::env;
+use std::io::{self};
 use std::path::Path;
+use std::process::Command;
 use tokio::fs;
+use tokio::io::AsyncReadExt;
 
 fn download_audio_from_youtube(url: String, output: &str) -> io::Result<()> {
-    let status = Command::new("./yt-dlp --user-agent \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36\" --referer \"https://www.youtube.com\"")
+    Command::new("yt-dlp").arg("-U");
+    let status = Command::new("yt-dlp")
         .arg("-x")
         .arg("--audio-format")
         .arg("m4a")
@@ -34,7 +35,12 @@ async fn download_end_point(
     println!("video id is {:?}", params);
     let video_id: String = match params.get("video_id") {
         Some(video_id) => video_id.clone(),
-        None => return Err((axum::http::StatusCode::BAD_REQUEST, "Video ID is required".to_string())),
+        None => {
+            return Err((
+                axum::http::StatusCode::BAD_REQUEST,
+                "Video ID is required".to_string(),
+            ))
+        }
     };
 
     let video_url = format!("https://www.youtube.com/watch?v={}", &video_id);
@@ -44,28 +50,42 @@ async fn download_end_point(
     // Ensure the directory exists before downloading
     let output_dir = Path::new(&download_path_string).parent().unwrap();
     if !output_dir.exists() {
-        fs::create_dir_all(output_dir).await.expect("Failed to create output directory");
+        fs::create_dir_all(output_dir)
+            .await
+            .expect("Failed to create output directory");
     }
 
     // Download audio
     if let Err(e) = download_audio_from_youtube(video_url, download_path) {
         eprintln!("Error downloading audio: {}", e);
-        return Err((axum::http::StatusCode::INTERNAL_SERVER_ERROR, "Download failed".to_string()));
+        return Err((
+            axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+            "Download failed".to_string(),
+        ));
     }
 
     let file_path = format!("{}.m4a", &video_id);
     if !Path::new(&file_path).exists() {
-        return Err((axum::http::StatusCode::NOT_FOUND, "Audio file not found".to_string()));
+        return Err((
+            axum::http::StatusCode::NOT_FOUND,
+            "Audio file not found".to_string(),
+        ));
     }
 
-    let mut file = fs::File::open(&file_path)
-        .await
-        .map_err(|_| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, "Failed to open audio file".to_string()))?;
+    let mut file = fs::File::open(&file_path).await.map_err(|_| {
+        (
+            axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+            "Failed to open audio file".to_string(),
+        )
+    })?;
 
     let mut buffer = Vec::new();
-    file.read_to_end(&mut buffer)
-        .await
-        .map_err(|_| (axum::http::StatusCode::INTERNAL_SERVER_ERROR, "Failed to read audio file".to_string()))?;
+    file.read_to_end(&mut buffer).await.map_err(|_| {
+        (
+            axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+            "Failed to read audio file".to_string(),
+        )
+    })?;
 
     let response = Response::builder()
         .header("Content-Type", "audio/mp4") // Correct MIME type for .m4a (audio/mp4)
@@ -93,10 +113,10 @@ async fn main() {
         .route("/", get(|| async { "ok" }));
 
     let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
-    
+
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port))
         .await
         .unwrap();
-    
+
     axum::serve(listener, app).await.unwrap();
 }

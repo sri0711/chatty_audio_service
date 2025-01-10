@@ -11,7 +11,7 @@ use std::path::Path;
 use tokio::fs;
 
 fn download_audio_from_youtube(url: String, output: &str) -> io::Result<()> {
-    let status = Command::new("yt-dlp --cookies ./cookies.json")
+    let status = Command::new("yt-dlp --user-agent \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36\" --referer \"https://www.youtube.com\"")
         .arg("-x")
         .arg("--audio-format")
         .arg("m4a")

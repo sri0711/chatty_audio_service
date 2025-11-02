@@ -59,7 +59,7 @@ async fn download_end_point(
         eprintln!("Error downloading audio: {}", e);
         return Err((
             axum::http::StatusCode::INTERNAL_SERVER_ERROR,
-            "Download failed".to_string(),
+            "Download failed...".to_string(),
         ));
     }
 

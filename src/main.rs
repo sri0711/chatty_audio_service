@@ -116,6 +116,6 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port))
         .await
         .unwrap();
-    println!("server is started http://0.0.0.0:3000/ ...");
+    println!("server is started http://0.0.0.0:3000/");
     axum::serve(listener, app).await.unwrap();
 }

@@ -78,8 +78,6 @@ RUN apk add --no-cache \
     yt-dlp \
     && rm -rf /var/cache/apk/*
 
-RUN yt-dlp -U
-
 # Copy the executable from the "build" stage.
 COPY --from=build /bin/server /bin/
 

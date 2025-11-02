@@ -25,7 +25,6 @@ fn download_audio_from_youtube(url: String, output: &str) -> io::Result<()> {
         eprintln!("Error downloading audio.");
         return Err(io::Error::new(io::ErrorKind::Other, "Download failed"));
     }
-
     Ok(())
 }
 

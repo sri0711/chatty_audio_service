@@ -72,11 +72,7 @@ FROM alpine:3.18 AS final
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
 ARG UID=10001
 
-RUN apk add --no-cache \
-    libstdc++ \
-    ffmpeg \
-    yt-dlp \
-    && rm -rf /var/cache/apk/*
+RUN mkdir ./temp
 
 # Copy the executable from the "build" stage.
 COPY --from=build /bin/server /bin/

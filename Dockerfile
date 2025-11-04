@@ -28,6 +28,7 @@ RUN apk add --no-cache clang lld musl-dev git file
 RUN apk add --no-cache \
     libstdc++ \
     ffmpeg \
+    openssl-dev \
     yt-dlp \
     && rm -rf /var/cache/apk/*
 

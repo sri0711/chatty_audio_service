@@ -24,11 +24,10 @@ WORKDIR /app
 COPY --from=xx / /
 
 # Install host build dependencies.
-RUN apk add --no-cache clang lld musl-dev git file
+RUN apk add --no-cache clang lld musl-dev git file build-base pkgconfig openssl-dev
 RUN apk add --no-cache \
     libstdc++ \
     ffmpeg \
-    openssl-dev \
     yt-dlp \
     && rm -rf /var/cache/apk/*
 

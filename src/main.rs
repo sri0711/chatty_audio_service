@@ -1,7 +1,10 @@
-use chatty_audio::helper::audio_codec::decrypt_url;
+use chatty_audio::{app, helper::audio_codec::decrypt_url};
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let ciphertext = "ID2ieOjCrwfgWvL5sXl4B1ImC5QfbsDyboG4XrmNvTDrEDvrfcr0Mn/5QKRbmNP/KBfaFeyigA3duQuCdY/GmRw7tS9a8Gtq";
     let decrypted = decrypt_url(ciphertext);
     println!("{}", decrypted);
+
+    app::run().await
 }

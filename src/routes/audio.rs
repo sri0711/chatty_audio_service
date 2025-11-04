@@ -34,12 +34,38 @@ pub mod audio_routes {
         let config = get_configs();
 
         let client = reqwest::Client::new();
-        let response = client
+
+        // Make the request
+        let response = match client
             .get(format!("{}{}", config.search_base_url, query.search_input))
             .send()
             .await
-            .unwrap();
-        let body: Value = response.json().await.unwrap();
+        {
+            Ok(resp) => resp,
+            Err(err) => {
+                eprintln!("Failed to make HTTP call: {}", err);
+                return Json(json!({
+                    "status": "error",
+                    "code": 500,
+                    "message": "Failed to make external request"
+                }));
+            }
+        };
+
+        // Parse the JSON
+        let body: Value = match response.json().await {
+            Ok(json) => json,
+            Err(err) => {
+                eprintln!("Failed to parse JSON: {}", err);
+                return Json(json!({
+                    "status": "error",
+                    "code": 500,
+                    "message": "Failed to parse response"
+                }));
+            }
+        };
+
+        // Return success
         Json(json!({
             "status": "ok",
             "code": 200,

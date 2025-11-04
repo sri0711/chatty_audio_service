@@ -5,3 +5,22 @@ album_details_base_url = "https://www.jiosaavn.com/api.php?__call=content.getAlb
 playlist_details_base_url = "https://www.jiosaavn.com/api.php?__call=playlist.getDetails&_format=json&cc=in&_marker=0%3F_marker%3D0&listid="
 lyrics_base_url = "https://www.jiosaavn.com/api.php?__call=lyrics.getLyrics&ctx=web6dot0&api_version=4&_format=json&_marker=0%3F_marker%3D0&lyrics_id="
  */
+
+pub mod configurations {
+    #[allow(dead_code)]
+    pub struct ConfigurationStruct {
+        pub search_base_url: String,
+        pub song_details_url: String,
+    }
+    pub fn get_configs() -> ConfigurationStruct {
+        let search_base_url = "https://www.jiosaavn.com/api.php?__call=autocomplete.get&_format=json&_marker=0&cc=in&includeMetaTags=1&query=".to_owned();
+        let song_details_url ="https://www.jiosaavn.com/api.php?__call=song.getDetails&cc=in&_marker=0%3F_marker%3D0&_format=json&pids=".to_owned();
+
+        let configs: ConfigurationStruct = ConfigurationStruct {
+            search_base_url,
+            song_details_url,
+        };
+
+        configs
+    }
+}

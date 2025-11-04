@@ -1,9 +1,12 @@
 {
 	"cSpell.words": [
+		"ciphertext",
 		"dbmdl",
 		"libstdc",
 		"Pkcs",
 		"reproducability",
+		"reqwest",
+		"serde",
 		"tonistiigi",
 		"toolstarget"
 	]

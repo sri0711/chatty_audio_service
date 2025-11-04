@@ -31,6 +31,7 @@ pub mod audio_routes {
     // controllers
 
     async fn search_song(Query(query): Query<SearchSongQuery>) -> Json<Value> {
+        println!("ok");
         let config = get_configs();
 
         let client = reqwest::Client::new();

@@ -71,7 +71,7 @@ pub mod audio_routes {
                 "message": "Upstream service returned an error"
             }));
         }
-
+        print!("got response");
         // Parse the JSON
         let body: Value = match response.json().await {
             Ok(json) => json,

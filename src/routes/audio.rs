@@ -45,10 +45,9 @@ pub mod audio_routes {
 
         let config = get_configs();
         let url = format!("{}{}", config.search_base_url, search_input);
-        println!("{}", url);
-
+        
         let client = reqwest::Client::new();
-
+        
         // Make the request
         let response = match client.get(&url).send().await {
             Ok(resp) => resp,
@@ -61,7 +60,8 @@ pub mod audio_routes {
                 }));
             }
         };
-
+        
+        println!("{}", url);
         // Check HTTP status
         if let Err(status_err) = response.error_for_status_ref() {
             eprintln!("Upstream returned error status: {}", status_err);

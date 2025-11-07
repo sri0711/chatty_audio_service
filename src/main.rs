@@ -6,5 +6,9 @@ async fn main() {
     let decrypted = decrypt_url(ciphertext);
     println!("{}", decrypted);
 
+    std::panic::set_hook(Box::new(|info| {
+        eprintln!("PANIC: {}", info);
+    }));
+
     app::run().await
 }

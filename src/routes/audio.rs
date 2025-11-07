@@ -1,8 +1,11 @@
 pub mod audio_routes {
 
     // imports
-    use axum::{extract::Query, routing::get, Json, Router};
-    use reqwest;
+    use axum::{extract::Query, http::HeaderMap, routing::get, Json, Router};
+    use reqwest::{
+        self,
+        header::{self, COOKIE},
+    };
     use serde::Deserialize;
     use serde_json::{json, Value};
 
@@ -45,11 +48,12 @@ pub mod audio_routes {
 
         let config = get_configs();
         let url = format!("{}{}", config.search_base_url, search_input);
-        
+
         let client = reqwest::Client::new();
-        
+        let mut headers = HeaderMap::new();
+        headers.append(COOKIE,format!("L=english; gdpr_acceptance=true; DL=english").parse().unwrap());
         // Make the request
-        let response = match client.get(&url).send().await {
+        let response = match client.get(&url).headers(headers).send().await {
             Ok(resp) => resp,
             Err(err) => {
                 eprintln!("Failed to make HTTP call: {}", err);
@@ -60,7 +64,7 @@ pub mod audio_routes {
                 }));
             }
         };
-        
+
         println!("{}", url);
         // Check HTTP status
         if let Err(status_err) = response.error_for_status_ref() {

@@ -6,6 +6,7 @@
 		"Pkcs",
 		"reproducability",
 		"reqwest",
+		"rustls",
 		"serde",
 		"tonistiigi",
 		"toolstarget"

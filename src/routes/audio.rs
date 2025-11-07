@@ -2,10 +2,7 @@ pub mod audio_routes {
 
     // imports
     use axum::{extract::Query, http::HeaderMap, routing::get, Json, Router};
-    use reqwest::{
-        self,
-        header::{self, COOKIE},
-    };
+    use reqwest::{self, header::COOKIE};
     use serde::Deserialize;
     use serde_json::{json, Value};
 
@@ -51,7 +48,12 @@ pub mod audio_routes {
 
         let client = reqwest::Client::new();
         let mut headers = HeaderMap::new();
-        headers.append(COOKIE,format!("L=english; gdpr_acceptance=true; DL=english").parse().unwrap());
+        headers.append(
+            COOKIE,
+            format!("L=english; gdpr_acceptance=true; DL=english")
+                .parse()
+                .unwrap(),
+        );
         // Make the request
         let response = match client.get(&url).headers(headers).send().await {
             Ok(resp) => resp,

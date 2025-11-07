@@ -43,7 +43,7 @@ ARG UID=10001
 RUN adduser -D -u $UID appuser
 
 # Install runtime deps (OpenSSL, ffmpeg, yt-dlp)
-RUN apk add --no-cache openssl ffmpeg yt-dlp
+RUN apk add --no-cache openssl ffmpeg yt-dlp ca-certificates
 
 COPY --from=build /bin/server /bin/server
 USER appuser

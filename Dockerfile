@@ -16,7 +16,7 @@ COPY --from=xx / /
 # Install build dependencies for Rust + OpenSSL + musl
 RUN apk add --no-cache \
     clang lld build-base musl-dev pkgconfig \
-    openssl openssl-dev libstdc++ git file ffmpeg yt-dlp
+    libstdc++ git file ffmpeg yt-dlp
 
 # Install target-specific musl headers
 RUN xx-apk add --no-cache musl-dev gcc openssl-dev
@@ -43,7 +43,7 @@ ARG UID=10001
 RUN adduser -D -u $UID appuser
 
 # Install runtime deps (OpenSSL, ffmpeg, yt-dlp)
-RUN apk add --no-cache openssl ffmpeg yt-dlp ca-certificates
+RUN apk add --no-cache ffmpeg yt-dlp ca-certificates
 
 COPY --from=build /bin/server /bin/server
 USER appuser

@@ -47,6 +47,12 @@ pub mod audio_routes {
         let url = format!("{}{}", config.search_base_url, search_input);
 
         let client = reqwest::Client::new();
+        let test_response = client
+            .get("https://reqres.in/api/users/1")
+            .send()
+            .await
+            .unwrap();
+        println!("{:?}", test_response);
         let mut headers = HeaderMap::new();
         headers.append(
             COOKIE,
@@ -55,7 +61,7 @@ pub mod audio_routes {
                 .unwrap(),
         );
         // Make the request
-        let response = match client.post(&url).headers(headers).send().await {
+        let response = match client.get(&url).headers(headers).send().await {
             Ok(resp) => resp,
             Err(err) => {
                 eprintln!("Failed to make HTTP call: {}", err);

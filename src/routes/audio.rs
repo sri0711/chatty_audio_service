@@ -55,7 +55,7 @@ pub mod audio_routes {
                 .unwrap(),
         );
         // Make the request
-        let response = match client.get(&url).headers(headers).send().await {
+        let response = match client.post(&url).headers(headers).send().await {
             Ok(resp) => resp,
             Err(err) => {
                 eprintln!("Failed to make HTTP call: {}", err);

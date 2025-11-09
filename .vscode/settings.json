@@ -4,13 +4,16 @@
 		"appuser",
 		"ciphertext",
 		"dbmdl",
+		"kbps",
 		"libstdc",
+		"perma",
 		"Pkcs",
 		"reproducability",
 		"reqwest",
 		"rustls",
 		"serde",
 		"tonistiigi",
-		"toolstarget"
+		"toolstarget",
+		"vlink"
 	]
 }

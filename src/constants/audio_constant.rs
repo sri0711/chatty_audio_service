@@ -82,3 +82,18 @@ where
 pub struct SongDetailsQuery {
     pub id: Option<String>,
 }
+
+#[derive(Deserialize, Debug, Serialize)]
+pub struct DownloadSong {
+    pub id: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SongDetailsResponse {
+    #[serde(rename = "320kbps")]
+    pub is_320: Option<String>,
+    #[serde(deserialize_with = "convert_string")]
+    pub encrypted_media_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub high_quality_link: Option<String>,
+}

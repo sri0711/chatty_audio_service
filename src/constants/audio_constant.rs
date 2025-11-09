@@ -66,6 +66,8 @@ pub struct SearchSongMoreInfo {
     pub vlink: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub high_quality_link: Option<String>,
+    pub album: Option<String>,
+    pub album_id: Option<String>,
 }
 
 fn convert_string<'de, D>(deserializer: D) -> Result<Option<String>, D::Error>

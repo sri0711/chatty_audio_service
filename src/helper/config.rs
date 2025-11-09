@@ -13,7 +13,7 @@ pub mod configurations {
         pub song_details_url: String,
     }
     pub fn get_configs() -> ConfigurationStruct {
-        let search_base_url = "https://www.jiosaavn.com/api.php?__call=autocomplete.get&_format=json&_marker=0&cc=in&includeMetaTags=1&query=".to_owned();
+        let search_base_url = "https://www.jiosaavn.com/api.php?__call=search.getResults&_format=json&_marker=0&cc=in&includeMetaTags=1&api_version=4&q=".to_owned();
         let song_details_url ="https://www.jiosaavn.com/api.php?__call=song.getDetails&cc=in&_marker=0%3F_marker%3D0&_format=json&pids=".to_owned();
 
         let configs: ConfigurationStruct = ConfigurationStruct {

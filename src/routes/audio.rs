@@ -1,24 +1,13 @@
 pub mod audio_routes {
 
     // imports
+    use crate::{
+        constants::audio_constant::{SearchSongMain, SearchSongQuery, SongDetailsQuery},
+        helper::config::configurations::get_configs,
+    };
     use axum::{extract::Query, http::HeaderMap, routing::get, Json, Router};
     use reqwest::{self, header::COOKIE};
-    use serde::Deserialize;
     use serde_json::{json, Value};
-
-    use crate::helper::config::configurations::get_configs;
-
-    // common structs
-    #[derive(Deserialize, Debug)]
-    struct SearchSongQuery {
-        // make optional so missing param doesn't crash extractor
-        search_input: Option<String>,
-    }
-
-    #[derive(Deserialize, Debug)]
-    struct SongDetailsQuery {
-        id: Option<String>,
-    }
 
     // route handler
     pub async fn bind_routes() -> Router {
@@ -47,12 +36,6 @@ pub mod audio_routes {
         let url = format!("{}{}", config.search_base_url, search_input);
 
         let client = reqwest::Client::new();
-        let test_response = client
-            .get("https://reqres.in/api/users/1")
-            .send()
-            .await
-            .unwrap();
-        println!("{:?}", test_response);
         let mut headers = HeaderMap::new();
         headers.append(
             COOKIE,
@@ -72,8 +55,6 @@ pub mod audio_routes {
                 }));
             }
         };
-
-        println!("{}", url);
         // Check HTTP status
         if let Err(status_err) = response.error_for_status_ref() {
             eprintln!("Upstream returned error status: {}", status_err);
@@ -85,7 +66,7 @@ pub mod audio_routes {
         }
         print!("got response");
         // Parse the JSON
-        let body: Value = match response.json().await {
+        let mut response_body: SearchSongMain = match response.json().await {
             Ok(json) => json,
             Err(err) => {
                 eprintln!("Failed to parse JSON: {}", err);
@@ -97,11 +78,37 @@ pub mod audio_routes {
             }
         };
 
+        for song in &mut response_body.results.iter_mut() {
+            for data in &mut song.iter_mut() {
+                for info_data in &mut data.more_info.iter_mut() {
+                    if info_data.is_320.as_deref() == Some("true") {
+                        info_data.high_quality_link = Some(
+                            info_data
+                                .encrypted_media_url
+                                .clone()
+                                .expect("")
+                                .replace("_96", "_320")
+                                .to_owned(),
+                        );
+                    } else {
+                        info_data.high_quality_link = Some(
+                            info_data
+                                .encrypted_media_url
+                                .clone()
+                                .expect("")
+                                .replace("_96", "_160")
+                                .to_owned(),
+                        );
+                    }
+                }
+            }
+        }
+
         // Return success
         Json(json!({
             "status": "ok",
             "code": 200,
-            "data": body
+            "data": response_body
         }))
     }
 

@@ -3,6 +3,10 @@ pub mod helper {
     pub mod config;
 }
 
+pub mod constants {
+    pub mod audio_constant;
+}
+
 pub mod routes {
     pub mod audio;
 }

@@ -5,7 +5,7 @@ use des::Des;
 
 type DesEcb = Ecb<Des, Pkcs7>;
 
-pub fn decrypt_url(url: &str) -> String {
+pub fn decrypt_url(url: String) -> String {
     let key = b"38346591";
     let encrypted = general_purpose::STANDARD
         .decode(url.trim())

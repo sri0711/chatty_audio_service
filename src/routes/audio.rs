@@ -219,7 +219,7 @@ pub mod audio_routes {
 
                 Response::builder()
                     .status(200)
-                    .header("content-type", "video/mp4")
+                    .header("content-type", "audio/mp4")
                     .body(body)
                     .unwrap()
                     .into_response()

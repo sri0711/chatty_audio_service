@@ -24,7 +24,7 @@ RUN --mount=type=bind,source=src,target=src \
     cp ./target/$(xx-cargo --print-target-triple)/release/$APP_NAME /bin/server && \
     xx-verify /bin/server
 
-FROM alpine:3.18 AS final
+FROM alpine:3.23 AS final
 ARG UID=10001
 RUN adduser -D -u $UID appuser
 RUN apk add --no-cache ffmpeg yt-dlp ca-certificates
